@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<style>
+			#dialog
+			{
+				border: solid 2px black;
+				height: 50px;
+			}
+			#fg{}
+			#bg{}
+			.Display > #bg-wrapper
+			{
+				display: flex;
+				justify-content: center;
+			}
+			.Display
+			{
+				display: none;
+			}
+			#canvas-wrapper
+			{
+				display: flex;
+				justify-content: center;
+			}
+			.konvajs-content
+			{
+				border: solid 2px black;
+			}
+		</style>
+		<script src="/src/js/Pen.js"></script>
+		<script src="/src/js/Color.js"></script>
+		<script src="/src/js/NormalDialog.js"></script>
+		<script src="/node_modules/konva/konva.min.js"></script>
+	</head>
+	
+	<body>
+		<!-- 在canvas上面实现基于软件的层级管理业务程序 -->
+		<div id="canvas-wrapper">
+			<canvas id="canvas" width="800px" height="600px"></canvas>
+		</div>
+		
+</body>
+<script>
+	var colors = new Color()
+	var canvas = document.getElementById("canvas")
+	var ctx = canvas.getContext("2d")
+	// var pen = new Pen(ctx)
+	// console.log(pen)
+	var stage = new Konva.Stage({
+		container: 'canvas-wrapper',
+		width: 800,
+		height: 600
+	})
+	var startLayer = new Konva.Layer()
+	var gameLayer = new Konva.Layer()
+	var guiLayer = new Konva.Layer()
+	stage.add(startLayer)
+	stage.add(gameLayer);
+	stage.add(guiLayer)
+	// renpy主界面
+	function VueGal_Init()
+	{
+		var startButton = new Konva.Label({
+		x:100,
+		y:200
+	});
+		
+		startButton.add(new Konva.Text({
+		text: 'start',
+		fontSize: 18,
+		fill: "black"
+	}))
+	startButton.on("pointerclick",()=>{
+		gameLayer.hide()
+		VueGal_GameInit()
+	})
+		gameLayer.add(startButton)
+	}
+	VueGal_Init()
+	
+	// 游戏界面
+	function VueGal_GameInit()
+	{
+		var menu_title = new Konva.Label({
+			x: 0,
+			y: 450,
+			fill: "orange",
+		})
+		menu_title.add(new Konva.Text({
+			text: 'title',
+			fontSize: 18,
+			fill: "orange"
+		}))
+		var menu_load = new Konva.Label({
+			x: 50,
+			y: 450,
+			fill: "orange",
+		})
+		menu_load.add(new Konva.Text({
+			text: 'load',
+			fontSize: 18,
+			fill: "orange"
+		}))
+		var menu_save = new Konva.Label({
+			x: 100,
+			y: 450,
+			fill: "orange",
+		})
+		menu_save.add(new Konva.Text({
+			text: 'save',
+			fontSize: 18,
+			fill: "orange"
+		}))
+		// 三层游戏基础层
+		var dialog_bg = new Konva.Rect({
+			x: 0,
+			y: 500,
+			width:800,
+			height:100,
+			fill: "orange"
+		})
+		var bg = new Konva.Rect({
+			x:0,
+			y:0,
+			width:800,
+			height:600,
+			fill: "black"
+		})
+		var fg = new Konva.Rect({
+			x: 400,
+			y: 300,
+			width:50,
+			height:200,
+			fill: "blue"
+		})
+		gameLayer.add(bg)
+		gameLayer.add(fg)
+		gameLayer.add(dialog_bg)
+
+		guiLayer.add(menu_title)
+		guiLayer.add(menu_load)
+		guiLayer.add(menu_save)
+		gameLayer.show()
+		update_dialog_normal()
+		// 事件绑定
+		dialog_bg.on("pointerclick",()=>
+		{
+			alert("点击了句子")
+		})
+		menu_title.on("pointerclick",()=>
+		{
+			gameLayer.hide()
+			guiLayer.hide()
+			gameLayer.show()
+		})
+		menu_load.on("pointerclick",()=>
+		{
+
+		})
+		menu_save.on("pointerclick",()=>
+		{
+
+		})
+
+	}
+	function pool_next_sentence()
+	{
+		
+	}
+	// function Looper(){}
+	// 更新对话框 不包含字符动画
+	function update_dialog_normal()
+	{
+		var dialog_text = new Konva.Label({
+			x:0,
+			y:500
+		})
+		dialog_text.add(new Konva.Text({
+			text: 'this is a sentence',
+			fontSize: 18,
+			fill: "black"
+		}))
+		gameLayer.add(dialog_text)
+	}
+	
+	// 更新对话框 包含字符动画
+	function update_dialog()
+	{
+
+	}
+
+
+	// function VueGal_Init()
+	// {
+	// 	pen.cls(ctx,800,600)
+	// 	pen.setFont(ctx,"25px serif")
+	// 	var Dialog = new NormalDialog(pen,ctx)
+	// 	Dialog.init_draw()
+	// 	const a = "this is a language"
+	// }
+	// 读取场景xml文件
+	// function VueGal_Screen_init()
+	// {
+	// 	pen.cls(ctx,800,600)
+	// 	var Dialog = new NormalDialog(pen,ctx)
+	// 	Dialog.init_draw()
+	// 	const a = "this is a language"
+	// }
+	// var bgImg = new Image()
+	// var girl1 = new Image()
+	
+
+
+	// bgImg.src = "bg/suika2.png"
+	// girl1.src = "bg/girl1.jpg"
+	// var imageQueue = []
+	// imageQueue.push(bgImg)
+	// imageQueue.push(girl1)
+
+	// 等待图片队列加载完毕，手动延时
+	// setTimeout(()=>
+	// {
+	// 	ctx.drawImage(bgImg,0,0)
+	// 	ctx.drawImage(girl1,50,50)
+	// 	setTimeout(() => {
+	// 		ctx.drawImage(bgImg,0,0)
+	// 	}, 1000);
+		
+	// },500)
+	
+	var layer1 = []
+	var layer2 = []
+
+	function onImageQueueLoaded()
+	{
+		return true;
+	}
+	// 重设图层高低属性
+	function set_top()
+	{
+
+	}
+	// 单帧操作 旋转图片 多个连接为一个动画
+	function tween_image()
+	{
+
+	}
+	// Canvas_init(ctx)
+	// 底层部分
+	// function Canvas_init(p_ctx)
+	// {
+	// 	ctx.fillRect(0,0,800,600)
+	// }
+	// function Render_layer()
+	// {
+	// 	return ;
+	// }
+</script>
+</html>

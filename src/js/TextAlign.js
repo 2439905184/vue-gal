@@ -1,0 +1,4 @@
+enum
+align_left 
+align_center
+align_right
